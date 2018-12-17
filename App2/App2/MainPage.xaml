@@ -1,0 +1,163 @@
+﻿<Page
+    x:Class="WeChat.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WeChat"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Loaded="PageLoad">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="6*"/>
+            <ColumnDefinition Width="12*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0"  Background="#3e3e40" >
+           
+            <Button Name="btnChat" Width="40" Height="40" HorizontalAlignment="Center" Background="{x:Null}" Click="btnChat_Click">
+                <Image Name="btnChatImage" Width="28" Height="28" Source="Assets/TabBar_Chat_Btn_Click.scale-200.png" Margin="-10,-6"/>
+            </Button>
+            <Button Name="btnContact" Width="40" Height="40" HorizontalAlignment="Center" Background="{x:Null}" >
+                <Image Name="btnContactImage" Width="28" Height="28" Source="Assets/TabBar_Contacts_Btn_Click.scale-200.png" Margin="-10,-6"/>
+            </Button>
+            <Button Name="btnPublic" Width="40" Height="40" HorizontalAlignment="Center" Background="{x:Null}" >
+                <Image Name="btnPublicImage" Width="35" Height="35" Source="Assets/c2.png" Margin="-10, -6, 0, 0"/>
+            </Button>
+            <Button Name="btnSearch" Width="40" Height="40" HorizontalAlignment="Center" Background="{x:Null}" Click="btnSearch_Click">
+                <Image Name="btnSearchImage" Width="38" Height="38" Source="Assets/c1.png" Margin="-10,-6, 0, 0"/>
+            </Button>
+        </StackPanel>
+
+        <ListView Background="#d3d3d3" Grid.Column="1" x:Name="MyList" IsItemClickEnabled="True"
+                      ItemsSource="{x:Bind ContactView.AllItems}" ItemClick="Get_Dialog">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:FriendList">
+                    <Grid Width="320" Height="80">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Width="60" Height="60" Source="{x:Bind bitmap}"/>
+                        <TextBlock Grid.Column="1" Width="160" Height="60" Text="{x:Bind NickName}"/>
+                        <AppBarButton Grid.Column="2" Icon="Setting" IsCompact="True" VerticalAlignment="Center">
+                            <AppBarButton.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="删除会话" Click="Delete_Click"/>
+                                    <MenuFlyoutItem Text="分享" Click="Share_click"/>
+                                </MenuFlyout>
+                            </AppBarButton.Flyout>
+                        </AppBarButton>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ListView Background="#d3d3d3" Grid.Column="1" x:Name="MyList2" IsItemClickEnabled="True"
+                      ItemsSource="{x:Bind AllContactView.AllItems}" Visibility="Collapsed">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:FriendList">
+                    <Grid Width="320" Height="80">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Width="60" Height="60" Source="{x:Bind bitmap}"/>
+                        <TextBlock Grid.Column="1" Width="160" Height="60" Text="{x:Bind NickName}"/>
+                        <AppBarButton Grid.Column="2" Icon="Setting" IsCompact="True" VerticalAlignment="Center">
+                            <AppBarButton.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="添加会话" Click="Add_Click"/>
+                                    <MenuFlyoutItem Text="分享" Click="Share_click1"/>
+                                </MenuFlyout>
+                            </AppBarButton.Flyout>
+                        </AppBarButton>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <ListView Background="#d3d3d3" Grid.Column="1" x:Name="MyList3" IsItemClickEnabled="True"
+                      ItemsSource="{x:Bind AllPublicView.AllItems}" Visibility="Collapsed">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:FriendList">
+                    <Grid Width="320" Height="80">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="180"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Width="60" Height="60" Source="{x:Bind bitmap}"/>
+                        <TextBlock Grid.Column="1" Width="160" Height="60" Text="{x:Bind NickName}"/>
+                        <AppBarButton Grid.Column="2" Icon="Setting" IsCompact="True" VerticalAlignment="Center">
+                            <AppBarButton.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Text="添加会话" Click="Add_Click2"/>
+                                    <MenuFlyoutItem Text="分享" Click="Share_click2"/>
+                                </MenuFlyout>
+                            </AppBarButton.Flyout>
+                        </AppBarButton>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Grid Background="#d3d3d3" Grid.Column="1" x:Name="MyList4" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <AutoSuggestBox Grid.Row="0" x:Name="Search"
+                      PlaceholderText="Search......"
+                      IsSuggestionListOpen="False"
+                      QuerySubmitted="Search_Click"
+                      QueryIcon="Find"/>
+            <ListView IsItemClickEnabled="True" Grid.Row="1" x:Name="MyList4_"
+                      ItemsSource="{x:Bind SearchView.AllItems}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:FriendList">
+                        <Grid Width="320" Height="80">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="180"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="0" Width="60" Height="60" Source="{x:Bind bitmap}"/>
+                            <TextBlock Grid.Column="1" Width="160" Height="60" Text="{x:Bind NickName}"/>
+                            <AppBarButton Grid.Column="2" Icon="Setting" IsCompact="True" VerticalAlignment="Center">
+                                <AppBarButton.Flyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="添加会话" Click="Add_Click3"/>
+                                        <MenuFlyoutItem Text="分享" Click="Share_click4"/>
+                                    </MenuFlyout>
+                                </AppBarButton.Flyout>
+                            </AppBarButton>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+        <Grid Grid.Column="2" x:Name="right" Visibility="Visible">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.5*"/>
+                <RowDefinition Height="9*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="border" Background="#ececec" Grid.Row="0">
+                <TextBlock x:Name="nickname" HorizontalAlignment="Center"/>
+            </Border>
+            <ScrollViewer Grid.Row="1" x:Name="scrolls" VerticalScrollBarVisibility="Auto">
+                <ScrollViewer.Content>
+                    <StackPanel Name="sp1" Background="#ececec" Orientation="Vertical" BorderThickness="1" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                </ScrollViewer.Content>
+            </ScrollViewer>
+            <TextBox x:Name="send" Grid.Row="2" Height="auto" Width="auto" BorderBrush="#ececec" BorderThickness="1"/>
+            <Button x:Name="button" Grid.Row="3" Content="发送" Click="Send_Message" HorizontalAlignment="Right"/>
+           
+        </Grid>
+    </Grid>
+</Page>
